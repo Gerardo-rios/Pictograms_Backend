@@ -67,4 +67,96 @@ async function loginPerson (req: Request, res: Response) {
 
 }
 
-export { registerPerson, loginPerson };
+async function getPersonById (req: Request, res: Response) {
+  const id = req.params.id;
+  const query = `
+    SELECT * FROM persona WHERE external_id = ?
+  `;
+  const values = [id];
+  const dbResult = await queryDB(query, values);
+  res.status(200).json({
+    status: 200,
+    msj: "Usuario encontrado",
+    datos: dbResult	
+  });
+}
+
+async function updatePerson (req: any, res: Response){
+  
+  if (!req.file) {
+    return res.status(400).json({
+      status: 400,
+      msj: "No se ha enviado un archivo"
+    });
+  }
+    
+  if (req.fileValidationError) {
+    return res.status(400).json({
+      status: 400,
+      msj: req.fileValidationError
+    });
+  }
+
+  const { nombres, apellidos, correo, clave, external_id } = req.body;
+
+  const person: Person = {
+    nombres,
+    apellidos,
+    correo,
+    clave,
+    external_id,
+    foto: req.file.filename
+  };
+
+  const query = `
+    UPDATE persona 
+    SET name = ?, last_name = ?, email = ?, password = ?, photo = ?
+    WHERE external_id = ?
+  `;
+
+  const values = [
+    person.nombres, 
+    person.apellidos, 
+    person.correo, 
+    person.clave, 
+    person.foto,
+    person.external_id
+  ];
+
+  const dbResponse = await queryDB(query, values);
+
+  res.status(200).json({
+    status: 200,
+    msj: "Usuario actualizado exitosamente",
+    datos: dbResponse
+  });
+  
+}
+
+async function deletePerson (req: Request, res: Response) {
+  const id = req.params.id;
+  const query = `
+    DELETE FROM persona WHERE external_id = ?
+  `;
+  const values = [id];
+  const dbResult = await queryDB(query, values);
+  res.status(200).json({
+    status: 200,
+    msj: "Usuario eliminado correctamente",
+    datos: dbResult
+  });
+}
+
+async function getPersons (req: Request, res: Response) {
+  const query = `
+    SELECT * FROM persona
+  `;
+  const dbResult = await queryDB(query, []);
+  res.status(200).json({
+    status: 200,
+    msj: "Usuarios encontrados",
+    datos: dbResult
+  });
+}
+
+export { registerPerson, loginPerson, getPersonById, updatePerson, deletePerson, getPersons };

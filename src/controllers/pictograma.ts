@@ -179,5 +179,32 @@ async function modifyPictograma (req: any, res: Response) {
 
 }
 
+async function deletePictograma (req: any, res: Response) {
+  const query = `
+            DELETE FROM pictograma WHERE external_id = ?
+        `;
+    
+  const values = [req.params.id];
+    
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dbResult: any = await queryDB(query, values);
+
+  if (dbResult.affectedRows === 0) {
+    return res.status(500).json({
+      status: 500,
+      msj: "Error al eliminar el pictograma en la bd"
+    });
+  }
+
+  const respuesta: Respuesta = {
+    status: 200,
+    msj: "Pictograma eliminado exitosamente",
+    datos: {}
+  };
+
+  res.status(200).json(respuesta);
+
+}
+
 
 export { registerPictograma, getAllPictogramas, getPictogramaById, modifyPictograma };
