@@ -8,9 +8,9 @@ async function registerPerson (req: Request, res: Response) {
   const person: Person = req.body;
   const query = `
     INSERT INTO persona 
-        (name, last_name, dni, email, password, external_id) 
+        (name, last_name, dni, email, type, password, external_id) 
     VALUES 
-        (?, ?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?, ?)
     `;
 
   const external_id = Math.random().toString(36).substring(2);
@@ -20,6 +20,7 @@ async function registerPerson (req: Request, res: Response) {
     person.apellidos,
     person.dni,
     person.correo,
+    person.tipo,
     person.clave,
     external_id,
   ];
