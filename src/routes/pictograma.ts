@@ -3,7 +3,8 @@ import {
     registerPictograma, 
     getAllPictogramas, 
     getPictogramaById, 
-    modifyPictograma 
+    modifyPictograma,
+    deletePictograma
 } from "../controllers/pictograma";
 import { verifyToken } from "../config/auth/auth";
 import uploadMiddleware from "../config/fileStorage/multer";
@@ -37,6 +38,12 @@ routerPictograma.put(
     "/pictogramas/update",
     uploadMiddleware,
     modifyPictograma,
+);
+
+routerPictograma.delete(
+    "/pictogramas/delete/:id",
+    verifyToken,
+    deletePictograma
 );
 
 export default routerPictograma;
