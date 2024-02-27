@@ -3,7 +3,7 @@ import * as path from 'path';
 
 const directoryPath = 'images';
 
-const deleteFile = (fileNameWithoutExtension: string) => {
+const deleteFile = async (fileNameWithoutExtension: string) => {
 
   const allowedExtensions = new Set(['.jpg', '.jpeg', '.png']);
 
@@ -17,8 +17,6 @@ const deleteFile = (fileNameWithoutExtension: string) => {
       const { name, ext } = path.parse(file);
       return name === fileNameWithoutExtension && allowedExtensions.has(ext);
     });
-
-    console.log('Archivos a eliminar:', filesToDelete);
 
     filesToDelete.forEach(file => {
       fs.unlink(path.join(directoryPath, file), err => {

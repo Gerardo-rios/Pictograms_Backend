@@ -194,7 +194,7 @@ async function deletePictograma (req: any, res: Response) {
       msj: "Error al eliminar el pictograma en la bd",
     });
   }
-  deleteFile(req.params.id);
+  await deleteFile(req.params.id);
   const respuesta: Respuesta = {
     status: 200,
     msj: "Pictograma eliminado exitosamente",
